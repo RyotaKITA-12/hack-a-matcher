@@ -1,14 +1,17 @@
-import { createStore } from 'vuex'
+import { Commit, createStore } from 'vuex'
 
 export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+    state: {
+        auth: false
+    },
+    getters: {
+    },
+    mutations: {
+        setAuth: (state: { auth: boolean }, auth: boolean) => state.auth = auth
+    },
+    actions: {
+        setAuth: ({ commit }: { commit: Commit }, auth: boolean) => commit('setAuth', auth)
+    },
+    modules: {
+    }
 })
