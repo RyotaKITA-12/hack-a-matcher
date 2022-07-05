@@ -4,6 +4,8 @@ import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import Forgot from '../pages/Forgot.vue'
 import Reset from '../pages/Reset.vue'
+import AccountProfile from '../pages/AccountProfile.vue'
+import AccountSetting from '../pages/AccountSetting.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -30,6 +32,16 @@ const routes: Array<RouteRecordRaw> = [
         path: '/reset/:token',
         name: 'reset',
         component: Reset,
+    },
+    {
+        path: '/account/profile',
+        name: 'account_profile',
+        component: AccountProfile,
+    },
+    {
+        path: '/account/setting',
+        name: 'account_setting',
+        component: AccountSetting,
     }
 ]
 

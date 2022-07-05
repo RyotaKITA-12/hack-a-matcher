@@ -2,13 +2,24 @@
     <main class="form-reset text-center">
         <form @submit.prevent="submit">
             <br>
-            <h1 class="h3 mb-3 fw-normal">Please new password.</h1>
+            <h1 class="h3 mb-3 fw-normal"><b>新しいパスワードを入力</b></h1>
             <br>
-            <input v-model="password" type="password" class="form-control" placeholder="Password" required>
-            <input v-model="passwordConfirm" type="password" class="form-control" placeholder="Password Confirm"
-                required>
+            <div class="input-container">
+                <label for="password" class="text-secondary"><b>パスワード</b></label>
+                <input id="password" v-model="password" type="password" class="form-control" placeholder="Password"
+                    required>
+            </div>
             <br>
-            <button class="w-50 btn btn-lg btn-primary" type="submit">RESET</button>
+            <br>
+            <div class="input-container">
+                <label for="passwordConfirm" class="text-secondary"><b>パスワード(確認用)</b></label>
+                <input id="passwordConfirm" v-model="passwordConfirm" type="password" class="form-control"
+                    placeholder="Password Confirm" required>
+            </div>
+            <br>
+            <br>
+            <br>
+            <button class="w-50 btn btn-lg btn-danger>" type="submit">RESET</button>
         </form>
     </main>
 </template>

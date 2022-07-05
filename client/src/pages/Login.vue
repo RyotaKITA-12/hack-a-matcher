@@ -2,16 +2,27 @@
     <main class="form-login text-center">
         <form @submit.prevent="login">
             <br>
-            <h1 class="h3 mb-3 fw-normal text-primary"><b>SIGN IN</b></h1>
-            <input v-model="email" class="form-control" placeholder="Email" required>
+            <h1 class="h1 mb-3 fw-normal text-primary"><b>ログイン</b></h1>
+            <hr>
             <br>
-            <input v-model="password" class="form-control" placeholder="Password" required>
+            <div class="input-container">
+                <label for="email" class="text-secondary"><b>Eメール</b></label>
+                <input id="email" v-model="email" class="form-control" placeholder="Email" required>
+            </div>
+            <br>
+            <br>
+            <div class="input-container">
+                <label for="password" class="text-secondary"><b>パスワード</b></label>
+                <input id="password" v-model="password" type="password" class="form-control" placeholder="Password" required>
+            </div>
+            <br>
+            <br>
             <br>
             <button class="w-50 btn btn-lg btn-primary" type="submit">LOG IN</button>
             <br>
             <br>
             <div class="mb-2">
-                <router-link to="/forgot">Forgot Password</router-link>
+                <router-link to="/forgot">パスワードを忘れた</router-link>
             </div>
         </form>
     </main>
@@ -65,17 +76,5 @@ export default {
 
 .form-login .form-control:focus {
     z-index: 2;
-}
-
-.form-login input[type="email"] {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.form-login input[type="password"] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
 }
 </style>

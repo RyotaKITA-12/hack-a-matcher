@@ -2,15 +2,37 @@
     <main class="form-register text-center">
         <form @submit.prevent="submit">
             <br>
-            <h1 class="h3 mb-3 fw-normal text-primary"><b>SIGN UP</b></h1>
-            <input v-model="name" class="form-control" placeholder="Name" required>
+            <h1 class="h1 mb-3 fw-normal text-success"><b>アカウントを作成</b></h1>
+            <hr>
             <br>
-            <input v-model="email" class="form-control" placeholder="Email" required>
+            <div class="input-container">
+                <label for="name" class="text-secondary"><b>ユーザ名</b></label>
+                <input id="name" v-model="name" class="form-control" placeholder="Name" required>
+            </div>
             <br>
-            <input v-model="password" class="form-control" placeholder="Password" required>
-            <input v-model="passwordConfirm" class="form-control" placeholder="Password Confirm" required>
             <br>
-            <button class="w-50 btn btn-lg btn-primary" type="submit">REGISTER</button>
+            <div class="input-container">
+                <label for="email" class="text-secondary"><b>Eメール</b></label>
+                <input id="email" v-model="email" class="form-control" placeholder="Email" required>
+            </div>
+            <br>
+            <br>
+            <div class="input-container">
+                <label for="password" class="text-secondary"><b>パスワード</b></label>
+                <input id="password" v-model="password" type="password" class="form-control" placeholder="Password"
+                    required>
+            </div>
+            <br>
+            <br>
+            <div class="input-container">
+                <label for="passwordConfirm" class="text-secondary"><b>パスワード(確認用)</b></label>
+                <input id="passwordConfirm" v-model="passwordConfirm" type="password" class="form-control"
+                    placeholder="Password Confirm" required>
+            </div>
+            <br>
+            <br>
+            <br>
+            <button class="w-50 btn btn-lg btn-success" type="submit">REGISTER</button>
         </form>
     </main>
 </template>
@@ -69,5 +91,18 @@ export default {
 
 .form-register .form-control:focus {
     z-index: 2;
+}
+
+.input-container {
+    display: inline-block;
+    position: relative;
+    right: -75px
+}
+
+.input-container label {
+    position: absolute;
+    left: -150px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 </style>

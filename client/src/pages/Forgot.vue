@@ -2,11 +2,16 @@
     <main class="form-forgot text-center">
         <form @submit.prevent="forgot">
             <br>
-            <h1 class="h3 mb-3 fw-normal">Please e-mail address.</h1>
+            <h1 class="h3 mb-3 fw-normal"><b>メールアドレスを入力</b></h1>
             <br>
-            <input v-model="email" type="email" class="form-control mb-3" placeholder="Email" required>
+            <div class="input-container">
+                <label for="email" class="text-secondary"><b>Eメール</b></label>
+                <input id="email" v-model="email" class="form-control" placeholder="Email" required>
+            </div>
             <br>
-            <button class="w-50 btn btn-lg btn-primary" type="submit">SEND</button>
+            <br>
+            <br>
+            <button class="w-50 btn btn-lg btn-secondary" type="submit">SEND</button>
             <br>
             <br>
             <div v-if="notify.cls" :class="`alert alert-${notify.cls}`" role="alert">
