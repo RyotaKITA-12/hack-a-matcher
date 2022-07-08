@@ -18,12 +18,9 @@ type Claims struct {
 
 func User(c *fiber.Ctx) error {
 	cookie := c.Cookies("jwt")
-	log.Println(cookie)
 	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret"), nil
 	})
-	log.Println(cookie)
-	log.Println(token)
 	if err != nil || !token.Valid {
 		log.Println(err)
 		c.Status(fiber.StatusUnauthorized)

@@ -10,6 +10,7 @@ func Setup(app *fiber.App) {
     app.Get("/api/user", controllers.User)
     app.Get("/api/profile", controllers.Profile)
     app.Get("/api/link", controllers.Link)
+    app.Get("/api/post", controllers.Post)
     app.Post("/api/register", controllers.Register)
     app.Post("/api/login", controllers.Login)
     app.Post("/api/password/forgot", controllers.SendMail)
@@ -17,4 +18,5 @@ func Setup(app *fiber.App) {
     app.Post("/api/logout", controllers.Logout)
     app.Post("/api/register/profile", controllers.RegisterProfile)
     app.Post("/api/register/link", controllers.RegisterLink)
+    app.Post("/api/register/post", controllers.RegisterPost)
 }
