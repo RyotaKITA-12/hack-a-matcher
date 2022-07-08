@@ -6,6 +6,7 @@ import Forgot from '../pages/Forgot.vue'
 import Reset from '../pages/Reset.vue'
 import AccountProfile from '../pages/AccountProfile.vue'
 import AccountSetting from '../pages/AccountSetting.vue'
+import TimeLine from '../pages/timeLine.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -42,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/account/setting',
         name: 'account_setting',
         component: AccountSetting,
+    },
+    {
+        path: '/home',
+        name: 'home',
+        component: TimeLine,
     }
 ]
 

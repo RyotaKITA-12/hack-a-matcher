@@ -6,7 +6,7 @@ import (
 
 type Skill struct {
 	gorm.Model
-	UserID     uint   `json:"user_id"`
-	experience string `json:"experience"`
-	skill      string `json:"skill"`
+	UserID     int    `json:"user_id"`
+	Experience string `json:"experience"`
+	Skill      string `json:"skill"`
 }

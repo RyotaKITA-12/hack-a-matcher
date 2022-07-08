@@ -1,35 +1,35 @@
 <template>
     <main class="form-profile text-center">
         <br>
-        <h1 class="h1 mb-3 fw-normal text-secondary"><b>プロフィール</b></h1>
+        <h1 class="h1 mb-3 fw-normal"><b>プロフィール</b></h1>
         <hr>
         <br>
         <div class="profile-container">
-            <h2 class="h6 text-dark"><b>プロフィール</b></h2>
-            <div class="container bg-light rounded">
+            <h2 class="h6"><b>個人情報</b></h2>
+            <div class="container bg-gray rounded">
                 <div class="row">
                     <p></p>
                     <p class="text-secondary col-4">Eメール</p>
-                    <p class="text-dark col-8">test@example.com</p>
+                    <p class="text-dark col-8">{{ email }}</p>
                 </div>
                 <div class="row">
                     <p class="text-secondary col-4">生年月日</p>
-                    <p class="text-dark col-8">2001年12月12日</p>
+                    <p class="text-dark col-8">{{ birth }}</p>
                 </div>
                 <div class="row">
                     <p class="text-secondary col-4">性別</p>
-                    <p class="text-dark col-8">男性</p>
+                    <p class="text-dark col-8">{{ gender }}</p>
                 </div>
                 <div class="row">
                     <p class="text-secondary col-4">住所</p>
-                    <p class="text-dark col-8">東京都</p>
+                    <p class="text-dark col-8">{{ address }}</p>
                 </div>
             </div>
         </div>
         <br>
         <div class="profile-container">
-            <h2 class="h6 text-dark"><b>リンク</b></h2>
-            <div class="container bg-light rounded">
+            <h2 class="h6"><b>リンク</b></h2>
+            <div class="container bg-gray rounded">
                 <div class="row">
                     <p></p>
                     <p class="text-secondary col-4">Portfolio</p>
@@ -49,8 +49,8 @@
         </div>
         <br>
         <div class="profile-container">
-            <h2 class="h6 text-dark"><b>スキル</b></h2>
-            <div class="container  bg-light rounded">
+            <h2 class="h6"><b>スキル</b></h2>
+            <div class="container  bg-gray rounded">
                 <div class="row">
                     <p></p>
                     <p class="text-secondary col-4">役割</p>
@@ -89,16 +89,16 @@
                 <div class="row">
                     <p class="text-secondary col-4">言語</p>
                     <div class="profile-rect">
-                        <svg class="rounded-pill rect-left" width="100" height="35">
+                        <svg class="rounded-pill rect-left" width="130" height="35">
                             <rect width="100%" height="100%" fill="#E7E7E7"></rect>
                             <text x="50%" y="50%" fill="#334" text-anchor="middle"
                                 dominant-baseline="central">Python</text>
                         </svg>
-                        <svg class="rounded-pill rect-left" width="100" height="35">
+                        <svg class="rounded-pill rect-left" width="130" height="35">
                             <rect width="100%" height="100%" fill="#E7E7E7"></rect>
                             <text x="50%" y="50%" fill="#334" text-anchor="middle" dominant-baseline="central">Go</text>
                         </svg>
-                        <svg class="rounded-pill rect-left" width="100" height="35">
+                        <svg class="rounded-pill rect-left" width="130" height="35">
                             <rect width="100%" height="100%" fill="#E7E7E7"></rect>
                             <text x="50%" y="50%" fill="#334" text-anchor="middle"
                                 dominant-baseline="central">JavaScript</text>
@@ -113,30 +113,39 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { useRouter } from 'vue-router'
+import { useStore } from "vuex"
+import moment from "moment"
 
 export default {
     name: "profile",
     setup() {
-        const email = ref('')
-        const password = ref('')
-        const router = useRouter()
+        const email = ref('none')
+        const birth = ref('none')
+        const gender = ref('none')
+        const address = ref('none')
+        const store = useStore()
 
-        const profile = async () => {
-            await axios.post('profile', {
-                email: email.value,
-                password: password.value
-            })
-
-            await router.push('/')
-        }
+        onMounted(async () => {
+            try {
+                const { data } = await axios.get('profile')
+                email.value = `${data.email}`
+                birth.value = `${data.birthday}`
+                birth.value = moment(birth.value).format("YYYY年MM月DD日")
+                gender.value = `${data.gender}`
+                address.value = `${data.address}`
+                await store.dispatch('setAuth', true)
+            } catch (e) {
+                await store.dispatch('setAuth', false)
+            }
+        })
 
         return {
             email,
-            password,
-            profile
+            birth,
+            gender,
+            address,
         }
     }
 }
@@ -162,9 +171,9 @@ export default {
     z-index: 2;
 }
 
-/* .profile-container div {             */
-/*     /* background-color: #F0F0F0; */
-/* }                                    */
+/* .profile-container div {       */
+/*     background-color: #F0F0F5; */
+/* }                              */
 
 .container p {
     display: inline;
@@ -175,7 +184,16 @@ export default {
     text-align: left;
 }
 
+.profile-rect svg {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .rect-left {
     float: left;
+}
+
+.bg-gray {
+    background-color: #F5F5FF;
 }
 </style>

@@ -6,8 +6,8 @@ import (
 
 type Link struct {
 	gorm.Model
-	UserID    uint   `json:"user_id"`
-	portfolio string `json:"portfolio"`
-	twitter   string `json:"twitter"`
-	github    string `json:"github"`
+	UserID    int    `json:"user_id"`
+	Portfolio string `json:"portfolio"`
+	Twitter   string `json:"twitter"`
+	Github    string `json:"github"`
 }

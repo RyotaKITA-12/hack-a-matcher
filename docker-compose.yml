@@ -31,6 +31,8 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: hackamatcher
+    cap_add:
+      - SYS_NICE
     ports:
       - 3306:3306
     volumes:
