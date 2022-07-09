@@ -4,70 +4,136 @@
         <h1 class="h1 mb-3 fw-normal"><b>Home</b></h1>
         <hr>
         <br>
+        <button class="w=30 btn btn-success" @click="openModal">投稿</button>
+        <div id="overlay" v-show="showContent">
+            <form @submit.prevent="submit">
+                <div id="content" class="rounded">
+                    <button class="btn-circle btn-outline-dark " @click="closeModal">x</button>
+                    <h1 class="h1 mb-3 fw-normal text-success"><b>募集</b></h1>
+                    <hr>
+                    <br>
+                    <div class="input-container">
+                        <label for="title" class="text-secondary"><b>タイトル</b></label>
+                        <input id="title" v-model="title" class="form-control" placeholder="Title" required>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="input-container">
+                        <label for="recruit_name" class="text-secondary"><b>募集人数</b></label>
+                        <input id="recruit_name" v-model="recruit_num" class="form-control" placeholder="100" required>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="input-container">
+                        <label for="view_period" class="text-secondary"><b>掲載期限</b></label>
+                        <input id="view_period" type="date" v-model="view_period"
+                            :min="new Date().toISOString().split('T')[0]">
+                    </div>
+                    <br>
+                    <br>
+                    <div class="input-container">
+                        <label for="FormControlTextarea" class="text-secondary form-label"><b>本文</b></label>
+                        <textarea id="FormControlTextarea" class="form-control" v-model="content" placeholder="本文"
+                            rows="6"></textarea>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <button class="w-50 btn btn-lg btn-success" type="submit">投稿する</button>
+                    <br>
+                    <br>
+                </div>
+            </form>
+        </div>
+        <br>
+        <br>
         <div class="profile-container">
-            <h2 class="h6"><b>個人情報</b></h2>
-            <div class="container bg-gray rounded">
-                <div class="row">
-                    <p></p>
-                    <p class="text-secondary col-4">Eメール</p>
-                    <p class="text-dark col-8">{{ email }}</p>
-                </div>
-                <div class="row">
-                    <p class="text-secondary col-4">生年月日</p>
-                    <p class="text-dark col-8">{{ birth }}</p>
-                </div>
-                <div class="row">
-                    <p class="text-secondary col-4">性別</p>
-                    <p class="text-dark col-8">{{ gender }}</p>
-                </div>
-                <div class="row">
-                    <p class="text-secondary col-4">住所</p>
-                    <p class="text-dark col-8">{{ address }}</p>
+            <div class="overflow-scroll bg-dark border border-dark border-5" style="height:600px; padding: 50px;">
+                <div v-for="item in posts">
+                    <div class="bg-light rounded border border-4" style="padding-right: 20px;padding-left: 20px;">
+                        <br>
+                        <p>ID : {{ item.user_id }}　　募集人数 : {{ item.recruit_num }}</p>
+                        <h1 class="h6 text-dark"><b>{{ item.title }}</b></h1>
+                        <hr>
+                        <br>
+                        <p>{{ item.content }}</p>
+                        <br>
+                        <hr>
+                        <p>{{ item.CreatedAt.substr(0, 10) }}　〜　{{ item.view_period.substr(0, 10) }}</p>
+                    </div>
+                    <br>
                 </div>
             </div>
         </div>
     </main>
 </template>
-
 <script>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useStore } from "vuex"
-import moment from "moment"
+import Profile from '@/pages/AccountProfile.vue'
+/* import moment from "moment" */
 
 export default {
-    name: "profile",
+    name: "timeline",
+    components: {
+        Profile
+    },
     setup() {
-        const email = ref('none')
-        const birth = ref('none')
-        const gender = ref('none')
-        const address = ref('none')
         const store = useStore()
+        const posts = ref([])
 
+        var showContent = ref(false)
+        const openModal = () => {
+            showContent.value = true
+        }
+        const closeModal = () => {
+            showContent.value = false
+        }
         onMounted(async () => {
             try {
-                const { data } = await axios.get('profile')
-                email.value = `${data.email}`
-                birth.value = `${data.birthday}`
-                birth.value = moment(birth.value).format("YYYY年MM月DD日")
-                gender.value = `${data.gender}`
-                address.value = `${data.address}`
+                const { data } = await axios.get('post')
+                console.log(data)
+                data.forEach(elem => posts.value.push(elem))
+                console.log(posts)
                 await store.dispatch('setAuth', true)
             } catch (e) {
                 await store.dispatch('setAuth', false)
             }
         })
 
+        const title = ref('');
+        const recruit_num = ref('');
+        const view_period = ref('');
+        const content = ref('');
+
+
+        const submit = async () => {
+            const { data } = await axios.get('user')
+            await axios.post('register/post', {
+                user_id: `${data.ID}`,
+                title: title.value,
+                recruit_num: recruit_num.value,
+                content: content.value,
+                view_period: view_period.value,
+            })
+            showContent.value = false
+        }
+
         return {
-            email,
-            birth,
-            gender,
-            address,
+            posts,
+            showContent,
+            openModal,
+            closeModal,
+            title,
+            recruit_num,
+            content,
+            view_period,
+            submit
         }
     }
 }
 </script>
-
 <style>
 .form-profile {
     width: 100%;
@@ -112,6 +178,56 @@ export default {
 
 .bg-gray {
     background-color: #F5F5FF;
+}
+
+#overlay {
+    z-index: 1;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+#content {
+    z-index: 2;
+    width: 450px;
+    padding: 1em;
+    background: #fff;
+}
+
+input[type="date"] {
+    padding: 0 10px;
+    width: 200px;
+    height: 40px;
+    border: solid 1px #CCC;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #999;
+    box-shadow: 0px;
+}
+
+.btn-circle {
+    font-size: 100%;
+    font-weight: bold;
+    border: 1px solid #999;
+    color: #999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 1.5em;
+    line-height: 1.3em;
+    cursor: pointer;
+    transition: .2s;
 }
 </style>
 

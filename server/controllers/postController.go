@@ -16,6 +16,9 @@ func Post(c *fiber.Ctx) error {
 	var posts []models.Post
 	database.DB.Where("view_period > ?", now_time).Find(&posts)
 
+    // data, _ := json.Marshal(posts)
+    // log.Printf("%s", data)
+
 	return c.JSON(posts)
 }
 
@@ -28,7 +31,7 @@ func RegisterPost(c *fiber.Ctx) error {
 
 	user_id, _ := strconv.Atoi(data["user_id"])
 	rec_num, _ := strconv.Atoi(data["recruit_num"])
-	view_time, _ := time.Parse("200601021504", data["view_period"])
+	view_time, _ := time.Parse("2006-01-02", data["view_period"])
 
 	post := models.Post{
 		UserID:     user_id,

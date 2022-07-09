@@ -5,6 +5,50 @@
         <hr>
         <br>
         <div class="profile-container">
+            <h2 class="h6" style="float:right; textalign: left; color:#2277FF;">
+                <a hlef="#" @click.stop.prevent="openEditProfile" style="float:right; textalign: left;"><b>編集</b></a>
+            </h2>
+            <div id="overlay" v-show="showEditProfile">
+                <form @submit.prevent="submit">
+                    <div id="content" class="rounded">
+                        <button class="btn-circle btn-outline-dark " @click="closeEditProfile">x</button>
+                        <h1 class="h1 mb-3 fw-normal text-success"><b>募集</b></h1>
+                        <hr>
+                        <br>
+                        <div class="input-container">
+                            <label for="title" class="text-secondary"><b>タイトル</b></label>
+                            <input id="title" v-model="title" class="form-control" placeholder="Title" required>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="input-container">
+                            <label for="recruit_name" class="text-secondary"><b>募集人数</b></label>
+                            <input id="recruit_name" v-model="recruit_num" class="form-control" placeholder="100"
+                                required>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="input-container">
+                            <label for="view_period" class="text-secondary"><b>掲載期限</b></label>
+                            <input id="view_period" type="date" v-model="view_period"
+                                :min="new Date().toISOString().split('T')[0]">
+                        </div>
+                        <br>
+                        <br>
+                        <div class="input-container">
+                            <label for="FormControlTextarea" class="text-secondary form-label"><b>本文</b></label>
+                            <textarea id="FormControlTextarea" class="form-control" v-model="content" placeholder="本文"
+                                rows="6"></textarea>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <button class="w-50 btn btn-lg btn-success" type="submit">投稿する</button>
+                        <br>
+                        <br>
+                    </div>
+                </form>
+            </div>
             <h2 class="h6"><b>個人情報</b></h2>
             <div class="container bg-gray rounded">
                 <div class="row">
@@ -141,11 +185,24 @@ export default {
             }
         })
 
+        var showEditProfile = ref(false)
+        const openEditProfile = () => {
+            showEditProfile.value = true
+        }
+        const closeEditProfile = () => {
+            showEditProfile.value = false
+            k
+        }
+
+
         return {
             email,
             birth,
             gender,
             address,
+            showEditProfile,
+            openEditProfile,
+            closeEditProfile
         }
     }
 }
@@ -195,5 +252,9 @@ export default {
 
 .bg-gray {
     background-color: #F5F5FF;
+}
+
+a:hover {
+    cursor: pointer;
 }
 </style>
