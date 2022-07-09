@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"log"
 	"strconv"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/RyotaKITA-12/hack-a-matcher.git/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 func Profile(c *fiber.Ctx) error {
@@ -39,16 +41,22 @@ func RegisterProfile(c *fiber.Ctx) error {
 	}
 
 	i, _ := strconv.Atoi(data["user_id"])
-	t, _ := time.Parse("20060102", data["birthday"])
+	t, _ := time.Parse("2006-01-02", data["birthday"])
 
 	profile := models.Profile{
-		UserID:     i,
-		Email:      data["email"],
-		Birth:      t,
-		Address:    data["address"],
-		Occupation: data["occupation"],
+		UserID:  i,
+		Email:   data["email"],
+		Birth:   t,
+		Gender:  data["gender"],
+		Address: data["address"],
 	}
-	database.DB.Create(&profile)
+	if err := database.DB.Model(&profile).Where("user_id = ?", i).Updates(&profile).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			database.DB.Create(&profile)
+		}
+	}
+
+	// database.DB.Save(&profile)
 
 	return c.JSON(profile)
 }
