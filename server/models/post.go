@@ -9,6 +9,7 @@ import (
 type Post struct {
 	gorm.Model
 	UserID     int       `json:"user_id"`
+	UserName   string    `json:"user_name"`
 	Title      string    `json:"title"`
 	RecruitNum int       `json:"recruit_num"`
 	Content    string    `json:"content"`

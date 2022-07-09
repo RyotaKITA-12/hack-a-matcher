@@ -109,7 +109,19 @@ func Logout(c *fiber.Ctx) error {
 		Expires:  time.Now().Add(-time.Hour),
 		HTTPOnly: true,
 	}
-    c.Cookie(&cookie)
+	c.Cookie(&cookie)
 
-    return c.JSON(fiber.Map{"message": "Success."})
+	return c.JSON(fiber.Map{"message": "Success."})
+}
+
+func UserName(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Query("user_id"))
+	if err != nil {
+		log.Println(err)
+	}
+
+	var user models.User
+	database.DB.Where("ID=?", id).First(&user)
+
+	return c.JSON(user)
 }

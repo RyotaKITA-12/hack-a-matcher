@@ -12,9 +12,29 @@
                     <h1 class="h1 mb-3 fw-normal text-success"><b>募集</b></h1>
                     <hr>
                     <br>
+                    <p class="h4">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" v-model="post_type" name="post_type"
+                                value="dev">
+                            <label class="form-check-label text-secondary" for="dev">開発</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" v-model="post_type" name="post_type"
+                                value="study">
+                            <label class="form-check-label text-secondary" for="study">勉強会</label>
+                        </div>
+                    </p>
+                    <br>
                     <div class="input-container">
                         <label for="title" class="text-secondary"><b>タイトル</b></label>
                         <input id="title" v-model="title" class="form-control" placeholder="Title" required>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="input-container">
+                        <label for="skills" class="text-secondary form-label"><b>スキル</b></label>
+                        <Multiselect id="skills" v-model="value" mode="tags" placeholder="Select skills"
+                            :options="options" :searchable="true" :createTag="true" style="width: 200px;" />
                     </div>
                     <br>
                     <br>
@@ -52,7 +72,7 @@
                 <div v-for="item in posts">
                     <div class="bg-light rounded border border-4" style="padding-right: 20px;padding-left: 20px;">
                         <br>
-                        <p>ID : {{ item.user_id }}　　募集人数 : {{ item.recruit_num }}</p>
+                        <p>投稿者 : {{ item.user_name }}　　募集人数 : {{ item.recruit_num }}</p>
                         <h1 class="h6 text-dark"><b>{{ item.title }}</b></h1>
                         <hr>
                         <br>
@@ -71,14 +91,12 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useStore } from "vuex"
-import Profile from '@/pages/AccountProfile.vue'
+import Multiselect from '@vueform/multiselect'
 /* import moment from "moment" */
 
 export default {
     name: "timeline",
-    components: {
-        Profile
-    },
+    components: { Multiselect },
     setup() {
         const store = useStore()
         const posts = ref([])
@@ -90,12 +108,17 @@ export default {
         const closeModal = () => {
             showContent.value = false
         }
+
+        const value = []
+        const options = ['js', 'node', 'vue', 'react', 'typescript']
+
         onMounted(async () => {
             try {
                 const { data } = await axios.get('post')
                 console.log(data)
-                data.forEach(elem => posts.value.push(elem))
-                console.log(posts)
+                data.forEach(elem => {
+                    posts.value.push(elem)
+                })
                 await store.dispatch('setAuth', true)
             } catch (e) {
                 await store.dispatch('setAuth', false)
@@ -112,6 +135,7 @@ export default {
             const { data } = await axios.get('user')
             await axios.post('register/post', {
                 user_id: `${data.ID}`,
+                user_name: `${data.user_name}`,
                 title: title.value,
                 recruit_num: recruit_num.value,
                 content: content.value,
@@ -129,7 +153,9 @@ export default {
             recruit_num,
             content,
             view_period,
-            submit
+            submit,
+            value,
+            options
         }
     }
 }
@@ -230,4 +256,5 @@ input[type="date"] {
     transition: .2s;
 }
 </style>
-
+<style src="@vueform/multiselect/themes/default.css">
+</style>
