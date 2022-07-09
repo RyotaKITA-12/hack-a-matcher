@@ -4,7 +4,7 @@
         <h1 class="h1 mb-3 fw-normal"><b>プロフィール</b></h1>
         <hr>
         <br>
-        <div class="overflow-scroll bg-dark border border-dark border-5" style="height:650px; padding: 50px;">
+        <div class="overflow-scroll" style="height:750px;">
             <div class="profile-container">
                 <h2 class="h6" style="float:right; textalign: left; color:#2277FF;">
                     <a hlef="#" @click.stop.prevent="openEditProfile"
@@ -302,7 +302,6 @@ export default {
 
 .profile-container h2 {
     text-align: left;
-    color: #DDD
 }
 
 .profile-rect svg {

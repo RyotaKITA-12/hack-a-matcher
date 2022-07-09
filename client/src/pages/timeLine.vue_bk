@@ -13,14 +13,16 @@
                     <hr>
                     <br>
                     <p class="h4">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" v-model="post_type" name="post_type" value="dev">
-                        <label class="form-check-label text-secondary" for="dev">開発</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" v-model="post_type" name="post_type" value="study">
-                        <label class="form-check-label text-secondary" for="study">勉強会</label>
-                    </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" v-model="post_type" name="post_type"
+                                value="dev">
+                            <label class="form-check-label text-secondary" for="dev">開発</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" v-model="post_type" name="post_type"
+                                value="study">
+                            <label class="form-check-label text-secondary" for="study">勉強会</label>
+                        </div>
                     </p>
                     <br>
                     <div class="input-container">
@@ -33,6 +35,12 @@
                         <label for="skills" class="text-secondary form-label"><b>スキル</b></label>
                         <Multiselect id="skills" v-model="value" mode="tags" placeholder="Select skills"
                             :options="options" :searchable="true" :createTag="true" style="width: 200px;" />
+                    </div>
+                    <br>
+                    <br>
+                    <div class="input-container">
+                        <label for="recruit_name" class="text-secondary"><b>募集人数</b></label>
+                        <input id="recruit_name" v-model="recruit_num" class="form-control" placeholder="100" required>
                     </div>
                     <br>
                     <br>
@@ -60,30 +68,18 @@
         <br>
         <br>
         <div class="profile-container">
-            <div class="overflow-scroll" style="height:700px; padding-left: 10px; padding-right: 10px;">
+            <div class="overflow-scroll bg-dark border border-dark border-5" style="height:600px; padding: 50px;">
                 <div v-for="item in posts">
-                    <div class="bg-light rounded">
-                        <div
-                            style="background: radial-gradient(#F2B9A1, #EA6264);display: table;width:100%;height: 40px; text-align:left;">
-                            <p class="text-dark" style="display: table-cell;vertical-align: middle;">
-                                <b>　投稿者 : {{
-                                        item.user_name
-                                }}</b>
-                            </p>
-                        </div>
-                        <div style="background: #EEE;display: table;width:100%;height: 40px;">
-                            <br>
-                            <h1 class="h6 text-dark"><b>{{ item.title }}</b></h1>
-                            <br>
-                        </div>
+                    <div class="bg-light rounded border border-4" style="padding-right: 20px;padding-left: 20px;">
+                        <br>
+                        <p>投稿者 : {{ item.user_name }}　　募集人数 : {{ item.recruit_num }}</p>
+                        <h1 class="h6 text-dark"><b>{{ item.title }}</b></h1>
+                        <hr>
                         <br>
                         <p>{{ item.content }}</p>
                         <br>
                         <hr>
-                        <div style="text-align: right;display: table;width:100%;">
-                            <p class="display: table-cell;vertical-align: middle;">{{ item.CreatedAt.substr(0, 10)
-                            }}　〜　{{ item.view_period.substr(0, 10) }}　</p>
-                        </div>
+                        <p>{{ item.CreatedAt.substr(0, 10) }}　〜　{{ item.view_period.substr(0, 10) }}</p>
                     </div>
                     <br>
                 </div>
@@ -114,7 +110,7 @@ export default {
         }
 
         const value = []
-        const options = ["basic", "c", "c#", "c++", "cobol", "d", "dart", "elixir", "erlang", "f#", "fortran", "go", "java", "javascript", "julia", "kotlin", "lua", "objective-c", "pascal", "perl", "php", "python", "r", "ruby", "rust", "scala", "swift", "typescript", "webassembly"]
+        const options = ['js', 'node', 'vue', 'react', 'typescript']
 
         onMounted(async () => {
             try {
