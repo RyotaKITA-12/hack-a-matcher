@@ -120,27 +120,36 @@
             </div>
             <br>
             <div class="profile-container">
+                <h2 class="h6" style="float:right; textalign: left; color:#2277FF;">
+                    <a hlef="#" @click.stop.prevent="openEditProfile"
+                        style="float:right; textalign: left;"><b>編集</b></a>
+                </h2>
                 <h2 class="h6"><b>リンク</b></h2>
                 <div class="container bg-gray rounded">
                     <div class="row">
                         <p></p>
                         <p class="text-secondary col-4">Portfolio</p>
-                        <p class="text-dark col-8"><a href="https://kt12.jp">kt12.jp</a></p>
+                        <p class="text-dark col-8"><a v-bind:href="`https://${portfolio}`">{{ portfolio }}</a></p>
                     </div>
                     <div class="row">
                         <p></p>
                         <p class="text-secondary col-4">Twitter</p>
-                        <p class="text-dark col-8"><a href="https://twitter.com/dhs_1212">@dhs_1212</a></p>
+                        <p class="text-dark col-8"><a v-bind:href="`https://twitter.com/${twitter}`">{{ twitter }}</a>
+                        </p>
                     </div>
                     <div class="row">
                         <p></p>
                         <p class="text-secondary col-4">Github</p>
-                        <p class="text-dark col-8"><a href="https://github.com/RyotaKITA-12">RyotaKITA-12</a></p>
+                        <p class="text-dark col-8"><a v-bind:href="`https://github.com/${github}`">{{ github }}</a></p>
                     </div>
                 </div>
             </div>
             <br>
             <div class="profile-container">
+                <h2 class="h6" style="float:right; textalign: left; color:#2277FF;">
+                    <a hlef="#" @click.stop.prevent="openEditProfile"
+                        style="float:right; textalign: left;"><b>編集</b></a>
+                </h2>
                 <h2 class="h6"><b>スキル</b></h2>
                 <div class="container  bg-gray rounded">
                     <div class="row">
@@ -153,25 +162,13 @@
                             <text x="50%" y="50%" fill="#334" text-anchor="middle"
                                 dominant-baseline="central">エンジニア</text>
                         </svg>
+                        <svg class="rounded-pill rect-left" width="100" height="35">
+                            <rect width="100%" height="100%" fill="#E7E7E7"></rect>
+                            <text x="50%" y="50%" fill="#334" text-anchor="middle"
+                                dominant-baseline="central">デザイナー</text>
+                        </svg>
                     </div>
                     <br>
-                    <br>
-                    <hr>
-                    <br>
-                    <div class="row">
-                        <p class="text-secondary col-4">使用経験</p>
-                        <p class="text-dark col-8">授業</p>
-                    </div>
-                    <div class="row">
-                        <p class="text-secondary col-4">言語</p>
-                        <div class="profile-rect">
-                            <svg class="rounded-pill rect-left" width="100" height="35">
-                                <rect width="100%" height="100%" fill="#E7E7E7"></rect>
-                                <text x="50%" y="50%" fill="#334" text-anchor="middle"
-                                    dominant-baseline="central">Pyhon</text>
-                            </svg>
-                        </div>
-                    </div>
                     <br>
                     <hr>
                     <br>
@@ -199,6 +196,23 @@
                             </svg>
                         </div>
                     </div>
+                    <div class="row">
+                        <p class="text-secondary col-4">使用経験</p>
+                        <p class="text-dark col-8">授業</p>
+                    </div>
+                    <div class="row">
+                        <p class="text-secondary col-4">言語</p>
+                        <div class="profile-rect">
+                            <svg class="rounded-pill rect-left" width="100" height="35">
+                                <rect width="100%" height="100%" fill="#E7E7E7"></rect>
+                                <text x="50%" y="50%" fill="#334" text-anchor="middle"
+                                    dominant-baseline="central">Pyhon</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                    <br>
                     <br>
                     <br>
                 </div>
@@ -213,6 +227,7 @@ import axios from 'axios'
 import { useStore } from "vuex"
 import moment from "moment"
 
+
 export default {
     name: "profile",
     setup() {
@@ -220,16 +235,23 @@ export default {
         const birth = ref('none')
         const gender = ref('none')
         const address = ref('none')
+        const portfolio = ref('none')
+        const twitter = ref('none')
+        const github = ref('none')
         const store = useStore()
 
         onMounted(async () => {
             try {
-                const { data } = await axios.get('profile')
-                email.value = `${data.email}`
-                birth.value = `${data.birthday}`
+                const p = await axios.get('profile')
+                const l = await axios.get('link')
+                email.value = `${p.data.email}`
+                birth.value = `${p.data.birthday}`
                 birth.value = moment(birth.value).format("YYYY年MM月DD日")
-                gender.value = `${data.gender}`
-                address.value = `${data.address}`
+                gender.value = `${p.data.gender}`
+                address.value = `${p.data.address}`
+                portfolio.value = `${l.data.portfolio}`
+                twitter.value = `${l.data.twitter}`
+                github.value = `${l.data.github}`
                 await store.dispatch('setAuth', true)
             } catch (e) {
                 await store.dispatch('setAuth', false)
@@ -262,6 +284,9 @@ export default {
             birth,
             gender,
             address,
+            portfolio,
+            twitter,
+            github,
             submit,
             showEditProfile,
             openEditProfile,

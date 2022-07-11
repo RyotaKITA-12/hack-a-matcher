@@ -7,6 +7,7 @@ import Reset from '../pages/Reset.vue'
 import AccountProfile from '../pages/AccountProfile.vue'
 import AccountSetting from '../pages/AccountSetting.vue'
 import TimeLine from '../pages/timeLine.vue'
+import Chat from '../pages/Chat.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -48,7 +49,13 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home',
         name: 'home',
         component: TimeLine,
+    },
+    {
+        path: '/chat',
+        name: 'chat',
+        component: Chat,
     }
+
 ]
 
 const router = createRouter({

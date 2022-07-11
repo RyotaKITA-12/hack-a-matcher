@@ -10,14 +10,14 @@ type Post struct {
 	gorm.Model
 	UserID     int       `json:"user_id"`
 	UserName   string    `json:"user_name"`
+	Post_type  string    `json:"post_type"`
 	Title      string    `json:"title"`
-	RecruitNum int       `json:"recruit_num"`
 	Content    string    `json:"content"`
 	ViewPeriod time.Time `json:"view_period"`
 }
 
-type PostRole struct {
+type PostSkill struct {
 	gorm.Model
 	PostID int    `json:"post_id"`
-	Role   string `json:"role"`
+	Lang   string `json:"lang"`
 }

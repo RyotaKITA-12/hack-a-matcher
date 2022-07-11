@@ -4,7 +4,21 @@
         <h1 class="h1 mb-3 fw-normal"><b>Home</b></h1>
         <hr>
         <br>
-        <button class="w=30 btn btn-success" @click="openModal">投稿</button>
+        <div v-if="isAscOrder">
+            <button class="w=30 btn btn-warning" @click="openModal">投稿</button>
+            <span>　　　</span>
+            <button class="w=30 btn btn-dark" @click="changeDescOrder">検索</button>
+            <span>　　　</span>
+            <button class="w=30 btn btn-danger" @click="changeDescOrder">昇順</button>
+        </div>
+        <div v-if="!isAscOrder">
+            <button class="w=30 btn btn-warning" @click="openModal">投稿</button>
+            <span>　　　</span>
+            <button class="w=30 btn btn-dark" @click="changeDescOrder">検索</button>
+            <span>　　　</span>
+            <button class="w=30 btn btn-primary" @click="changeAscOrder">降順</button>
+        </div>
+
         <div id="overlay" v-show="showContent">
             <form @submit.prevent="submit">
                 <div id="content" class="rounded">
@@ -12,16 +26,20 @@
                     <h1 class="h1 mb-3 fw-normal text-success"><b>募集</b></h1>
                     <hr>
                     <br>
-                    <p class="h4">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" v-model="post_type" name="post_type" value="dev">
-                        <label class="form-check-label text-secondary" for="dev">開発</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" v-model="post_type" name="post_type" value="study">
-                        <label class="form-check-label text-secondary" for="study">勉強会</label>
-                    </div>
-                    </p>
+                    <span class="h4">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" v-model="post_type" id="dev" name="post_type"
+                                value="dev">
+                            <label class="form-check-label text-secondary" for="dev">開発</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" v-model="post_type" id="study" name="post_type"
+                                value="study">
+                            <label class="form-check-label text-secondary" for="study">勉強会</label>
+                        </div>
+                    </span>
+                    <br>
+                    <br>
                     <br>
                     <div class="input-container">
                         <label for="title" class="text-secondary"><b>タイトル</b></label>
@@ -31,7 +49,7 @@
                     <br>
                     <div class="input-container">
                         <label for="skills" class="text-secondary form-label"><b>スキル</b></label>
-                        <Multiselect id="skills" v-model="value" mode="tags" placeholder="Select skills"
+                        <Multiselect id="skills" v-model="skills" mode="tags" placeholder="Select skills"
                             :options="options" :searchable="true" :createTag="true" style="width: 200px;" />
                     </div>
                     <br>
@@ -62,14 +80,26 @@
         <div class="profile-container">
             <div class="overflow-scroll" style="height:700px; padding-left: 10px; padding-right: 10px;">
                 <div v-for="item in posts">
-                    <div class="bg-light rounded">
-                        <div
-                            style="background: radial-gradient(#F2B9A1, #EA6264);display: table;width:100%;height: 40px; text-align:left;">
-                            <p class="text-dark" style="display: table-cell;vertical-align: middle;">
-                                <b>　投稿者 : {{
-                                        item.user_name
-                                }}</b>
-                            </p>
+                    <div class="shadow-bg bg-light rounded">
+                        <div v-if="item.post_type == 'dev'">
+                            <div style=" background: radial-gradient(#F2B9A1, #EA6264);display: table;width:100%;height:
+                            40px; text-align:left;">
+                                <p class="text-dark" style="display: table-cell;vertical-align: middle;">
+                                    <b>　投稿者 : {{
+                                            item.user_name
+                                    }}</b>
+                                </p>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div style=" background: radial-gradient(#B9A1F2, #6264EA);display: table;width:100%;height:
+                        40px; text-align:left;">
+                                <p class="text-dark" style="display: table-cell;vertical-align: middle;">
+                                    <b>　投稿者 : {{
+                                            item.user_name
+                                    }}</b>
+                                </p>
+                            </div>
                         </div>
                         <div style="background: #EEE;display: table;width:100%;height: 40px;">
                             <br>
@@ -78,11 +108,11 @@
                         </div>
                         <br>
                         <p>{{ item.content }}</p>
-                        <br>
                         <hr>
-                        <div style="text-align: right;display: table;width:100%;">
-                            <p class="display: table-cell;vertical-align: middle;">{{ item.CreatedAt.substr(0, 10)
-                            }}　〜　{{ item.view_period.substr(0, 10) }}　</p>
+                        <div style="text-align: left;display: table;width:100%;">
+                            <p class="display: table-cell;vertical-align: middle;">　{{ item.CreatedAt.substr(0, 10)
+                            }}　〜　{{ item.view_period.substr(0, 10) }}<span>　　　　　　　</span><button class="btn btn-sm btn-success">応募</button>
+                            </p>
                         </div>
                     </div>
                     <br>
@@ -96,14 +126,19 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useStore } from "vuex"
 import Multiselect from '@vueform/multiselect'
+import VueStar from 'vue-star'
 /* import moment from "moment" */
 
 export default {
     name: "timeline",
-    components: { Multiselect },
+    components: {
+        Multiselect,
+        VueStar,
+    },
     setup() {
         const store = useStore()
-        const posts = ref([])
+        var posts = ref([])
+        var langs = ref([])
 
         var showContent = ref(false)
         const openModal = () => {
@@ -112,14 +147,11 @@ export default {
         const closeModal = () => {
             showContent.value = false
         }
-
         const value = []
         const options = ["basic", "c", "c#", "c++", "cobol", "d", "dart", "elixir", "erlang", "f#", "fortran", "go", "java", "javascript", "julia", "kotlin", "lua", "objective-c", "pascal", "perl", "php", "python", "r", "ruby", "rust", "scala", "swift", "typescript", "webassembly"]
-
         onMounted(async () => {
             try {
                 const { data } = await axios.get('post')
-                console.log(data)
                 data.forEach(elem => {
                     posts.value.push(elem)
                 })
@@ -129,8 +161,20 @@ export default {
             }
         })
 
+        var isAscOrder = ref(true)
+        const changeDescOrder = () => {
+            isAscOrder.value = false
+            posts.value.reverse()
+        }
+        const changeAscOrder = () => {
+            isAscOrder.value = true
+            posts.value.reverse()
+        }
+
+
+        const skills = ref([])
+        const post_type = ref('');
         const title = ref('');
-        const recruit_num = ref('');
         const view_period = ref('');
         const content = ref('');
 
@@ -140,10 +184,14 @@ export default {
             await axios.post('register/post', {
                 user_id: `${data.ID}`,
                 user_name: `${data.user_name}`,
+                post_type: post_type.value,
                 title: title.value,
-                recruit_num: recruit_num.value,
                 content: content.value,
                 view_period: view_period.value,
+            })
+            await axios.post('register/post/skill', {
+                user_id: [`${data.ID}`],
+                skills: skills.value
             })
             showContent.value = false
         }
@@ -153,8 +201,13 @@ export default {
             showContent,
             openModal,
             closeModal,
+            isAscOrder,
+            changeDescOrder,
+            changeAscOrder,
+            langs,
+            skills,
+            post_type,
             title,
-            recruit_num,
             content,
             view_period,
             submit,
@@ -258,6 +311,10 @@ input[type="date"] {
     line-height: 1.3em;
     cursor: pointer;
     transition: .2s;
+}
+
+.shadow-bg {
+    box-shadow: 0 10px 25px 0 rgba(80, 134, 135, 0.3);
 }
 </style>
 <style src="@vueform/multiselect/themes/default.css">
