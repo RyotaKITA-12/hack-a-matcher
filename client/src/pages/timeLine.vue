@@ -111,7 +111,8 @@
                         <hr>
                         <div style="text-align: left;display: table;width:100%;">
                             <p class="display: table-cell;vertical-align: middle;">　{{ item.CreatedAt.substr(0, 10)
-                            }}　〜　{{ item.view_period.substr(0, 10) }}<span>　　　　　　　</span><button class="btn btn-sm btn-success">応募</button>
+                            }}　〜　{{ item.view_period.substr(0, 10) }}<span>　　　　　　　</span><button
+                                    class="btn btn-sm btn-success">応募</button>
                             </p>
                         </div>
                     </div>

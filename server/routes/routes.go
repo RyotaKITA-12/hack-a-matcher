@@ -10,8 +10,8 @@ func Setup(app *fiber.App) {
 	app.Get("/api/profile", controllers.Profile)
 	app.Get("/api/link", controllers.Link)
 	app.Get("/api/post", controllers.Post)
-    app.Get("/api/username", controllers.UserName)
-    app.Get("/api/skill", controllers.Skill)
+	app.Get("/api/username", controllers.UserName)
+	app.Get("/api/skill", controllers.Skill)
 	app.Post("/api/register", controllers.Register)
 	app.Post("/api/login", controllers.Login)
 	app.Post("/api/password/forgot", controllers.SendMail)
@@ -20,5 +20,5 @@ func Setup(app *fiber.App) {
 	app.Post("/api/register/profile", controllers.RegisterProfile)
 	app.Post("/api/register/link", controllers.RegisterLink)
 	app.Post("/api/register/post", controllers.RegisterPost)
-    app.Post("/api/register/post/skill", controllers.RegisterSkill)
+	app.Post("/api/register/post/skill", controllers.RegisterSkill)
 }

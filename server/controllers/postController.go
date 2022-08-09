@@ -16,7 +16,6 @@ func Post(c *fiber.Ctx) error {
 	var posts []models.Post
 	database.DB.Where("view_period > ?", now_time).Find(&posts)
 
-
 	// data, _ := json.Marshal(posts)
 	// log.Printf("%s", data)
 
